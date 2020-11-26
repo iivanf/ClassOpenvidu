@@ -1082,7 +1082,7 @@ module.exports = "h1 {\n  text-align: center;\n  margin: 0;\n  color: white;\n}\
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"header-div\">\n    <mat-icon id=\"back-btn\" (click)=\"location.back()\" [title]=\"'Back to lessons'\">keyboard_arrow_left</mat-icon>\n    <mat-icon class=\"right-btn\" (click)=\"toggleFullScreen()\" [title]=\"'Fullscreen'\">{{fullscreenIcon}}</mat-icon>\n    <mat-icon *ngIf=\"authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toggleLocalVideo()\" [title]=\"'Toggle video'\">{{videoIcon}}</mat-icon>\n    <mat-icon *ngIf=\"authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toggleLocalAudio()\" [title]=\"'Toggle audio'\">{{audioIcon}}</mat-icon>\n    <mat-icon *ngIf=\"!authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toggleRaiseHand()\" [title]=\"'Fullscreen'\">{{raiseHandIcon}}</mat-icon>\n    <h1>{{lesson?.title}}</h1>\n</div>\n<div id=\"publisher\"></div>\n<div id=\"subscriber\"></div>"
+module.exports = "<div id=\"header-div\">\n    <mat-icon id=\"back-btn\" (click)=\"location.back()\" [title]=\"'Back to lessons'\">keyboard_arrow_left</mat-icon>\n    <mat-icon class=\"right-btn\" (click)=\"toggleFullScreen()\" [title]=\"'Fullscreen'\">{{fullscreenIcon}}</mat-icon>\n    <mat-icon *ngIf=\"authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toggleLocalVideo()\" [title]=\"'Toggle video'\">{{videoIcon}}</mat-icon>\n    <mat-icon *ngIf=\"authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toggleLocalAudio()\" [title]=\"'Toggle audio'\">{{audioIcon}}</mat-icon>\n    <mat-icon id=\"hand\" *ngIf=\"!authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toggleRaiseHand()\" [title]=\"'Fullscreen'\">{{raiseHandIcon}}</mat-icon>\n    <h1>{{lesson?.title}}</h1>\n</div>\n<div id=\"publisher\"></div>\n<div id=\"subscriber\"></div>"
 
 /***/ }),
 
@@ -1143,6 +1143,15 @@ var VideoSessionComponent = /** @class */ (function () {
         this.session.on('streamDestroyed', function (event) {
             console.warn('STREAM DESTROYED!');
             console.warn(event.stream);
+        });
+        this.session.on('publisherStartSpeaking', function (event) {
+            console.log('Publisher ' + event.connection.connectionId + ' start speaking');
+            if (_this.localAudioActivated = !_this.localAudioActivated) {
+                console.log('Activa o audio anda!');
+            }
+        });
+        this.session.on('publisherStopSpeaking', function (event) {
+            console.log('Publisher ' + event.connection.connectionId + ' stop speaking');
         });
         this.session.on('connectionCreated', function (event) {
             if (event.connection.connectionId === _this.session.connection.connectionId) {
