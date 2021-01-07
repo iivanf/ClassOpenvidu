@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.openvidu.classroom.demo.user.User;
 import io.openvidu.classroom.demo.user.UserComponent;
 import io.openvidu.classroom.demo.user.UserRepository;
+import jdk.jfr.BooleanFlag;
 
 @RestController
 @RequestMapping("/api-lessons")
@@ -72,6 +73,47 @@ public class LessonController {
 		}
 		Lesson lesson = lessonRepository.findById(id_i).get();
 		return new ResponseEntity<>(lesson, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/lesson/{id}/slow", method = RequestMethod.GET)
+	public ResponseEntity<Boolean> getSlow(@PathVariable(value = "id") String id) {
+		System.out.println("CHAMO AO GET");
+		if (!this.userIsLogged()) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+
+		long id_i = -1;
+		try {
+			id_i = Long.parseLong(id);
+		} catch (NumberFormatException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		Lesson lesson = lessonRepository.findById(id_i).get();
+		return new ResponseEntity<>(lesson.getSlow(), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/lesson/{id}/slow", method = RequestMethod.PUT)
+	public ResponseEntity<Boolean> setSlow(@PathVariable(value = "id") String id) {
+		if (!this.userIsLogged()) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+
+		long id_i = -1;
+		try {
+			id_i = Long.parseLong(id);
+		} catch (NumberFormatException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		Lesson lesson = lessonRepository.findById(id_i).get();
+		if(user.hasRoleTeacher()){
+			Boolean flag = false;
+			lesson.setSlow(flag);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} else {
+			Boolean flag = true;
+			lesson.setSlow(flag);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
 	}
 
 	@RequestMapping(value = "/new", method = RequestMethod.POST)

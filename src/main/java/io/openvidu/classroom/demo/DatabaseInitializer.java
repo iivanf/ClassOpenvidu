@@ -31,12 +31,11 @@ public class DatabaseInitializer implements CommandLineRunner {
 		userRepository.save(user1);
 		userRepository.save(user2);
 		userRepository.save(user3);
-		userRepository.save(user4);
 		
 		//Sample lessons
 		Lesson c1 = new Lesson("Lesson number 1", user3);
 		Lesson c2 = new Lesson("Lesson number 2", user3);
-		Lesson c3 = new Lesson("SMM GRUPO-C !!", user4);
+		Lesson c3 = new Lesson("SMM GRUPO-C !!", user1);
 		
 		c1.getAttenders().add(user1);
 		c1.getAttenders().add(user2);
@@ -44,10 +43,15 @@ public class DatabaseInitializer implements CommandLineRunner {
 		
 		c2.getAttenders().add(user1);
 		c2.getAttenders().add(user3);
+
+		c3.getAttenders().add(user1);
+		c3.getAttenders().add(user2);
+		c3.getAttenders().add(user3);
 		
 		//Saving lessons
 		lessonRepository.save(c1);
 		lessonRepository.save(c2);
+		lessonRepository.save(c3);
 	}
 
 }

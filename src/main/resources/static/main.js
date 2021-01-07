@@ -1082,7 +1082,7 @@ module.exports = "h1 {\n  text-align: center;\n  margin: 0;\n  color: white;\n}\
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"header-div\">\n    <mat-icon id=\"back-btn\" (click)=\"location.back()\" [title]=\"'Back to lessons'\">keyboard_arrow_left</mat-icon>\n    <mat-icon class=\"right-btn\" (click)=\"toggleFullScreen()\" [title]=\"'Fullscreen'\">{{fullscreenIcon}}</mat-icon>\n    <mat-icon *ngIf=\"authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toggleLocalVideo()\" [title]=\"'Toggle video'\">{{videoIcon}}</mat-icon>\n    <mat-icon *ngIf=\"authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toggleLocalAudio()\" [title]=\"'Toggle audio'\">{{audioIcon}}</mat-icon>\n    <mat-icon id=\"hand\" *ngIf=\"!authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toggleRaiseHand()\" [title]=\"'Fullscreen'\">pan_tool</mat-icon>\n    <mat-icon *ngIf=\"authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toogleScreenShare()\" [title]=\"'Share Screen'\">screen_share</mat-icon>\n    <img src=\"assets/img/tortuga.png\" *ngIf=\"!authenticationService.isTeacher()\" (click)=\"toogleSlow()\"[title]=\"'tortuga'\" class=\"right-btn\" style=\"width: 50px; height: 50px;\">\n    <h1>{{lesson?.title}}</h1>\n</div>\n<div id=\"publisher\"></div>\n<div id=\"subscriber\"></div>\n"
+module.exports = "<div id=\"header-div\">\n    <mat-icon id=\"back-btn\" (click)=\"location.back()\" [title]=\"'Back to lessons'\">keyboard_arrow_left</mat-icon>\n    <mat-icon class=\"right-btn\" (click)=\"toggleFullScreen()\" [title]=\"'Fullscreen'\">{{fullscreenIcon}}</mat-icon>\n    <mat-icon *ngIf=\"authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toggleLocalVideo()\" [title]=\"'Toggle video'\">{{videoIcon}}</mat-icon>\n    <mat-icon *ngIf=\"authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toggleLocalAudio()\" [title]=\"'Toggle audio'\">{{audioIcon}}</mat-icon>\n    <mat-icon id=\"hand\" *ngIf=\"!authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toggleRaiseHand()\" [title]=\"'Raise Hand'\">pan_tool</mat-icon>\n    <!-- <mat-icon *ngIf=\"authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toogleScreenShare()\" [title]=\"'Share Screen'\">screen_share</mat-icon> -->\n    <img src=\"assets/img/tortuga.png\" (click)=\"toogleSlow()\"[title]=\"'tortuga'\" class=\"right-btn\" style=\"width: 50px; height: 50px;\">\n    <h1>{{lesson?.title}}</h1>\n</div>\n<div id=\"publisher\"></div>\n<div id=\"subscriber\"></div>\n"
 
 /***/ }),
 
@@ -1103,6 +1103,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var openvidu_browser__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(openvidu_browser__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _services_authentication_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../services/authentication.service */ "./src/app/services/authentication.service.ts");
 /* harmony import */ var _services_video_session_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../services/video-session.service */ "./src/app/services/video-session.service.ts");
+/* harmony import */ var _services_lesson_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../services/lesson.service */ "./src/app/services/lesson.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1118,11 +1119,13 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var VideoSessionComponent = /** @class */ (function () {
-    function VideoSessionComponent(location, authenticationService, videoSessionService, snackBar) {
+    function VideoSessionComponent(location, authenticationService, videoSessionService, lessonService, snackBar) {
         this.location = location;
         this.authenticationService = authenticationService;
         this.videoSessionService = videoSessionService;
+        this.lessonService = lessonService;
         this.snackBar = snackBar;
     }
     VideoSessionComponent.prototype.OPEN_VIDU_CONNECTION = function () {
@@ -1299,11 +1302,11 @@ var VideoSessionComponent = /** @class */ (function () {
         this.raiseHandIcon = 'pan_tool';
         console.log('HAND UP');
     };
-    VideoSessionComponent.prototype.toogleScreenShare = function () {
-        console.log("SHARE");
-    };
     VideoSessionComponent.prototype.toogleSlow = function () {
         console.log("TORTUGA");
+        this.lessonService.putSlow(this.lesson.id);
+        console.log(this.lesson.id);
+        console.log(this.lesson.slow);
     };
     VideoSessionComponent.prototype.exitFullScreen = function () {
         var document = window.document;
@@ -1344,6 +1347,7 @@ var VideoSessionComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [_angular_common__WEBPACK_IMPORTED_MODULE_0__["Location"],
             _services_authentication_service__WEBPACK_IMPORTED_MODULE_4__["AuthenticationService"],
             _services_video_session_service__WEBPACK_IMPORTED_MODULE_5__["VideoSessionService"],
+            _services_lesson_service__WEBPACK_IMPORTED_MODULE_6__["LessonService"],
             _angular_material__WEBPACK_IMPORTED_MODULE_2__["MatSnackBar"]])
     ], VideoSessionComponent);
     return VideoSessionComponent;
@@ -1680,10 +1684,27 @@ var LessonService = /** @class */ (function () {
     };
     LessonService.prototype.getLesson = function (lessonId) {
         var _this = this;
+        console.log("GET LESSON");
         var headers = new _angular_http__WEBPACK_IMPORTED_MODULE_1__["Headers"]({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
         var options = new _angular_http__WEBPACK_IMPORTED_MODULE_1__["RequestOptions"]({ headers: headers });
         return this.http.get(this.url + '/lesson/' + lessonId, options) // Must send userId
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (response) { return response.json(); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(function (error) { return _this.handleError(error); }));
+    };
+    LessonService.prototype.getSlow = function (lessonId) {
+        var _this = this;
+        console.log("GET SLOW");
+        var headers = new _angular_http__WEBPACK_IMPORTED_MODULE_1__["Headers"]({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
+        var options = new _angular_http__WEBPACK_IMPORTED_MODULE_1__["RequestOptions"]({ headers: headers });
+        return this.http.get(this.url + '/lesson/' + lessonId + '/slow', options) // Must send userId
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (response) { return console.log(response.json()); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(function (error) { return _this.handleError(error); }));
+    };
+    LessonService.prototype.putSlow = function (lessonId) {
+        var _this = this;
+        console.log("SET SLOW");
+        var headers = new _angular_http__WEBPACK_IMPORTED_MODULE_1__["Headers"]({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
+        var options = new _angular_http__WEBPACK_IMPORTED_MODULE_1__["RequestOptions"]({ headers: headers });
+        return this.http.put(this.url + '/lesson/' + lessonId + '/slow', options) // Must send userId
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (response) { return console.log("RESPOST: " + response.status); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(function (error) { return _this.handleError(error); }));
     };
     // POST new lesson. On success returns the created lesson
     LessonService.prototype.newLesson = function (lesson) {

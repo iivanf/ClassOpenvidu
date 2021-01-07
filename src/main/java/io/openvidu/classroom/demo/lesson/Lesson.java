@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import io.openvidu.classroom.demo.user.User;
+import jdk.jfr.BooleanFlag;
 
 @Entity
 public class Lesson {
@@ -32,6 +33,9 @@ public class Lesson {
 
 	@ManyToMany
 	private Set<User> attenders;
+
+	@JsonView(Boolean.class)
+	private Boolean slow;
 	
 	public Lesson() {}
 	
@@ -39,6 +43,7 @@ public class Lesson {
 		this.title = title;
 		this.teacher = teacher;
 		this.attenders = new HashSet<>();
+		this.slow = false;
 	}
 
 	public long getId() {
@@ -71,6 +76,14 @@ public class Lesson {
 
 	public void setAttenders(Set<User> attenders) {
 		this.attenders = attenders;
+	}
+
+	public Boolean getSlow() {
+		return slow;
+	}
+
+	public void setSlow(Boolean slow) {
+		this.slow = slow;
 	}
 	
 	//To make 'user.getLesson().remove(lesson)' possible
