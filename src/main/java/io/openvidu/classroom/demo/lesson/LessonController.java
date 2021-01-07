@@ -77,7 +77,7 @@ public class LessonController {
 
 	@RequestMapping(value = "/lesson/{id}/slow", method = RequestMethod.GET)
 	public ResponseEntity<Boolean> getSlow(@PathVariable(value = "id") String id) {
-		System.out.println("CHAMO AO GET");
+
 		if (!this.userIsLogged()) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
@@ -108,10 +108,12 @@ public class LessonController {
 		if(user.hasRoleTeacher()){
 			Boolean flag = false;
 			lesson.setSlow(flag);
+			System.out.println("UPDATING SLOW TO => "+ flag);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
 			Boolean flag = true;
 			lesson.setSlow(flag);
+			System.out.println("UPDATING SLOW TO => " + flag);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 	}

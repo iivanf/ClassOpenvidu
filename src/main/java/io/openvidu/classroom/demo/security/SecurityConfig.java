@@ -52,7 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//Lessons API
 		http.authorizeRequests().antMatchers(HttpMethod.GET, "/api-lessons/**").hasAnyRole("TEACHER", "STUDENT");
 		http.authorizeRequests().antMatchers(HttpMethod.POST, "/api-lessons/**").hasRole("TEACHER");
-		http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api-lessons/**").hasRole("TEACHER");
+		//http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api-lessons/**").hasRole("TEACHER");
+		http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api-lessons/**").hasAnyRole("TEACHER", "STUDENT");
 		http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api-lessons/**").hasRole("TEACHER");
 		
 		http.authorizeRequests().antMatchers(HttpMethod.POST, "/api-sessions/**").authenticated();

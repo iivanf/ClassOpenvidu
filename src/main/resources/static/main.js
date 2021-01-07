@@ -1229,6 +1229,15 @@ var VideoSessionComponent = /** @class */ (function () {
         }
         // Specific aspects of this concrete application
         this.afterConnectionStuff();
+        this.lessonService.getLesson(this.lesson.id).subscribe(function (response) {
+            // Lesson has been updated
+            console.log('Lesson chenged: ');
+            console.log("FROM: " + _this.lesson);
+            _this.lesson = response;
+            console.log("TO: " + _this.lesson);
+        }, function (error) {
+            console.log(error);
+        });
     };
     VideoSessionComponent.prototype.ngAfterViewInit = function () {
         this.toggleScrollPage('hidden');
@@ -1303,10 +1312,14 @@ var VideoSessionComponent = /** @class */ (function () {
         console.log('HAND UP');
     };
     VideoSessionComponent.prototype.toogleSlow = function () {
-        console.log("TORTUGA");
-        this.lessonService.putSlow(this.lesson.id);
-        console.log(this.lesson.id);
-        console.log(this.lesson.slow);
+        var _this = this;
+        this.lessonService.putSlow(this.lesson.id).subscribe(function (response) {
+            // Lesson has been updated
+            console.log('Lesson edited: ');
+            console.log(_this.lesson.slow);
+        }, function (error) {
+            console.log(error);
+        });
     };
     VideoSessionComponent.prototype.exitFullScreen = function () {
         var document = window.document;
