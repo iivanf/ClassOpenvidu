@@ -93,7 +93,7 @@ public class LessonController {
 	}
 
 	@RequestMapping(value = "/lesson/{id}/slow", method = RequestMethod.PUT)
-	public ResponseEntity<Boolean> setSlow(@PathVariable(value = "id") String id) {
+	public ResponseEntity<Lesson> setSlow(@PathVariable(value = "id") String id) {
 		if (!this.userIsLogged()) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
@@ -109,12 +109,14 @@ public class LessonController {
 			Boolean flag = false;
 			lesson.setSlow(flag);
 			System.out.println("UPDATING SLOW TO => "+ flag);
-			return new ResponseEntity<>(HttpStatus.OK);
+			lessonRepository.save(lesson);
+			return new ResponseEntity<>(lesson, HttpStatus.OK);
 		} else {
 			Boolean flag = true;
 			lesson.setSlow(flag);
 			System.out.println("UPDATING SLOW TO => " + flag);
-			return new ResponseEntity<>(HttpStatus.OK);
+			lessonRepository.save(lesson);
+			return new ResponseEntity<>(lesson, HttpStatus.OK);
 		}
 	}
 

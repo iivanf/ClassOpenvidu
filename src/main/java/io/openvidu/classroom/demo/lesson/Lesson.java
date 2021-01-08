@@ -34,7 +34,7 @@ public class Lesson {
 	@ManyToMany
 	private Set<User> attenders;
 
-	@JsonView(Boolean.class)
+	@JsonView(SimpleCourseList.class)
 	private Boolean slow;
 	
 	public Lesson() {}

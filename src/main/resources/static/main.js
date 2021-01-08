@@ -1229,15 +1229,7 @@ var VideoSessionComponent = /** @class */ (function () {
         }
         // Specific aspects of this concrete application
         this.afterConnectionStuff();
-        this.lessonService.getLesson(this.lesson.id).subscribe(function (response) {
-            // Lesson has been updated
-            console.log('Lesson chenged: ');
-            console.log("FROM: " + _this.lesson);
-            _this.lesson = response;
-            console.log("TO: " + _this.lesson);
-        }, function (error) {
-            console.log(error);
-        });
+        this.updateLesson();
     };
     VideoSessionComponent.prototype.ngAfterViewInit = function () {
         this.toggleScrollPage('hidden');
@@ -1310,13 +1302,20 @@ var VideoSessionComponent = /** @class */ (function () {
     VideoSessionComponent.prototype.toggleRaiseHand = function () {
         this.raiseHandIcon = 'pan_tool';
         console.log('HAND UP');
+        this.lessonService.getLesson(this.lesson.id).subscribe(function (response) {
+            // Lesson has been updated
+            console.log('GET LESSON: ');
+            console.log(response);
+        }, function (error) {
+            console.log(error);
+        });
     };
     VideoSessionComponent.prototype.toogleSlow = function () {
-        var _this = this;
+        console.log("BEFORE: " + this.lesson.slow);
         this.lessonService.putSlow(this.lesson.id).subscribe(function (response) {
             // Lesson has been updated
             console.log('Lesson edited: ');
-            console.log(_this.lesson.slow);
+            console.log(response);
         }, function (error) {
             console.log(error);
         });
@@ -1340,6 +1339,12 @@ var VideoSessionComponent = /** @class */ (function () {
     VideoSessionComponent.prototype.previousConnectionStuff = function () {
         this.lesson = this.videoSessionService.lesson;
         this.cameraOptions = this.videoSessionService.cameraOptions;
+    };
+    VideoSessionComponent.prototype.updateLesson = function () {
+        this.lessonService.getLesson(this.lesson.id).subscribe(function (response) {
+            console.log('Get lessons');
+            console.log(response);
+        });
     };
     VideoSessionComponent.prototype.afterConnectionStuff = function () {
         if (this.authenticationService.isTeacher()) {
@@ -1705,7 +1710,6 @@ var LessonService = /** @class */ (function () {
     };
     LessonService.prototype.getSlow = function (lessonId) {
         var _this = this;
-        console.log("GET SLOW");
         var headers = new _angular_http__WEBPACK_IMPORTED_MODULE_1__["Headers"]({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
         var options = new _angular_http__WEBPACK_IMPORTED_MODULE_1__["RequestOptions"]({ headers: headers });
         return this.http.get(this.url + '/lesson/' + lessonId + '/slow', options) // Must send userId
@@ -1717,7 +1721,7 @@ var LessonService = /** @class */ (function () {
         var headers = new _angular_http__WEBPACK_IMPORTED_MODULE_1__["Headers"]({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
         var options = new _angular_http__WEBPACK_IMPORTED_MODULE_1__["RequestOptions"]({ headers: headers });
         return this.http.put(this.url + '/lesson/' + lessonId + '/slow', options) // Must send userId
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (response) { return console.log("RESPOST: " + response.status); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(function (error) { return _this.handleError(error); }));
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (response) { return response.json(); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(function (error) { return _this.handleError(error); }));
     };
     // POST new lesson. On success returns the created lesson
     LessonService.prototype.newLesson = function (lesson) {
