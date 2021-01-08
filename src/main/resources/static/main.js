@@ -1104,6 +1104,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_authentication_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../services/authentication.service */ "./src/app/services/authentication.service.ts");
 /* harmony import */ var _services_video_session_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../services/video-session.service */ "./src/app/services/video-session.service.ts");
 /* harmony import */ var _services_lesson_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../services/lesson.service */ "./src/app/services/lesson.service.ts");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1113,6 +1114,7 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -1229,14 +1231,7 @@ var VideoSessionComponent = /** @class */ (function () {
         }
         // Specific aspects of this concrete application
         this.afterConnectionStuff();
-        setInterval(function () {
-            var _this = this;
-            this.lessonService.getLesson(this.lesson.id).subscribe(function (response) {
-                console.log('Get lessons');
-                console.log(response);
-                _this.lesson = response;
-            });
-        }, 1000);
+        Object(rxjs__WEBPACK_IMPORTED_MODULE_7__["interval"])(1000).subscribe(function (x) { return _this.updateLesson(); });
     };
     VideoSessionComponent.prototype.ngAfterViewInit = function () {
         this.toggleScrollPage('hidden');
@@ -1355,6 +1350,15 @@ var VideoSessionComponent = /** @class */ (function () {
     VideoSessionComponent.prototype.previousConnectionStuff = function () {
         this.lesson = this.videoSessionService.lesson;
         this.cameraOptions = this.videoSessionService.cameraOptions;
+    };
+    VideoSessionComponent.prototype.updateLesson = function () {
+        var _this = this;
+        this.lessonService.getLesson(this.lesson.id).subscribe(function (response) {
+            console.log(response.slow);
+            _this.lesson = response;
+        }, function (error) {
+            console.log(error);
+        });
     };
     VideoSessionComponent.prototype.afterConnectionStuff = function () {
         if (this.authenticationService.isTeacher()) {
@@ -1712,10 +1716,7 @@ var LessonService = /** @class */ (function () {
     };
     LessonService.prototype.getLesson = function (lessonId) {
         var _this = this;
-        console.log("GET LESSON");
-        var headers = new _angular_http__WEBPACK_IMPORTED_MODULE_1__["Headers"]({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
-        var options = new _angular_http__WEBPACK_IMPORTED_MODULE_1__["RequestOptions"]({ headers: headers });
-        return this.http.get(this.url + '/lesson/' + lessonId, options) // Must send userId
+        return this.http.get(this.url + '/lesson/' + lessonId)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (response) { return response.json(); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(function (error) { return _this.handleError(error); }));
     };
     LessonService.prototype.getSlow = function (lessonId) {

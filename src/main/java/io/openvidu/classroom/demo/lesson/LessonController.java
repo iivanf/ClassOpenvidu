@@ -41,9 +41,9 @@ public class LessonController {
 
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Collection<Lesson>> getLessons(@PathVariable(value = "id") String id) {
-		if (!this.userIsLogged()) {
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		}
+		// if (!this.userIsLogged()) {
+		// 	return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		// }
 
 		long id_i = -1;
 		try {
@@ -61,9 +61,9 @@ public class LessonController {
 
 	@RequestMapping(value = "/lesson/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Lesson> getLesson(@PathVariable(value = "id") String id) {
-		if (!this.userIsLogged()) {
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		}
+		// if (!this.userIsLogged()) {
+		// 	return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		// }
 
 		long id_i = -1;
 		try {
@@ -75,28 +75,11 @@ public class LessonController {
 		return new ResponseEntity<>(lesson, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/lesson/{id}/slow", method = RequestMethod.GET)
-	public ResponseEntity<Boolean> getSlow(@PathVariable(value = "id") String id) {
-
-		if (!this.userIsLogged()) {
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		}
-
-		long id_i = -1;
-		try {
-			id_i = Long.parseLong(id);
-		} catch (NumberFormatException e) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		Lesson lesson = lessonRepository.findById(id_i).get();
-		return new ResponseEntity<>(lesson.getSlow(), HttpStatus.OK);
-	}
-
 	@RequestMapping(value = "/lesson/{id}/slow", method = RequestMethod.PUT)
 	public ResponseEntity<Lesson> setSlow(@PathVariable(value = "id") String id) {
-		if (!this.userIsLogged()) {
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		}
+		// if (!this.userIsLogged()) {
+		// 	return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		// }
 
 		long id_i = -1;
 		try {

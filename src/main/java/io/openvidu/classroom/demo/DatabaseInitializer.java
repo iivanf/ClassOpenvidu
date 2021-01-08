@@ -22,10 +22,10 @@ public class DatabaseInitializer implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		
 		//Sample users
-		User user1 = new User("student1@gmail.com", "pass", "Student Imprudent", "ROLE_STUDENT");
-		User user2 = new User("student2@gmail.com", "pass", "Student Concludent", "ROLE_STUDENT");
-		User user3 = new User("teacher@gmail.com",  "pass", "Teacher Cheater", "ROLE_TEACHER");
-		User user4 = new User("proba@gmail.com",  "pass", "Teacher Proba", "ROLE_TEACHER");
+		User user1 = new User("student1@gmail.com", "pass", "Iván Ferro", "ROLE_STUDENT");
+		User user2 = new User("student2@gmail.com", "pass", "Pedro Vázquez", "ROLE_STUDENT");
+		User user3 = new User("teacher@gmail.com",  "pass", "Yolanda", "ROLE_TEACHER");
+
 		
 		//Saving users
 		userRepository.save(user1);
@@ -33,9 +33,9 @@ public class DatabaseInitializer implements CommandLineRunner {
 		userRepository.save(user3);
 		
 		//Sample lessons
-		Lesson c1 = new Lesson("Lesson number 1", user3);
-		Lesson c2 = new Lesson("Lesson number 2", user3);
-		Lesson c3 = new Lesson("SMM GRUPO-C !!", user1);
+		Lesson c1 = new Lesson("SMM TEORIA !!", user3);
+		Lesson c2 = new Lesson("SMM GRUPO-B !!", user3);
+		Lesson c3 = new Lesson("SMM GRUPO-C !!", user3);
 		
 		c1.getAttenders().add(user1);
 		c1.getAttenders().add(user2);
