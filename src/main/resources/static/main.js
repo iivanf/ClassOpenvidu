@@ -1229,7 +1229,14 @@ var VideoSessionComponent = /** @class */ (function () {
         }
         // Specific aspects of this concrete application
         this.afterConnectionStuff();
-        this.updateLesson();
+        setInterval(function () {
+            var _this = this;
+            this.lessonService.getLesson(this.lesson.id).subscribe(function (response) {
+                console.log('Get lessons');
+                console.log(response);
+                _this.lesson = response;
+            });
+        }, 1000);
     };
     VideoSessionComponent.prototype.ngAfterViewInit = function () {
         this.toggleScrollPage('hidden');
@@ -1245,6 +1252,15 @@ var VideoSessionComponent = /** @class */ (function () {
         if (this.OV) {
             this.session.disconnect();
         }
+    };
+    VideoSessionComponent.prototype.getLesson = function () {
+        var _this = this;
+        this.lessonService.getLesson(this.lesson.id).subscribe(function (lesson) {
+            console.log('GET LESSON: ');
+            console.log(lesson);
+            _this.lesson = lesson;
+            _this.authenticationService.updateUserLessons(_this.lesson);
+        }, function (error) { return console.log(error); });
     };
     VideoSessionComponent.prototype.toggleScrollPage = function (scroll) {
         var content = document.getElementsByClassName('mat-sidenav-content')[0];
@@ -1303,7 +1319,7 @@ var VideoSessionComponent = /** @class */ (function () {
         this.raiseHandIcon = 'pan_tool';
         console.log('HAND UP');
         this.lessonService.getLesson(this.lesson.id).subscribe(function (response) {
-            // Lesson has been updated
+            // Lesson has been updatedcd 
             console.log('GET LESSON: ');
             console.log(response);
         }, function (error) {
@@ -1339,12 +1355,6 @@ var VideoSessionComponent = /** @class */ (function () {
     VideoSessionComponent.prototype.previousConnectionStuff = function () {
         this.lesson = this.videoSessionService.lesson;
         this.cameraOptions = this.videoSessionService.cameraOptions;
-    };
-    VideoSessionComponent.prototype.updateLesson = function () {
-        this.lessonService.getLesson(this.lesson.id).subscribe(function (response) {
-            console.log('Get lessons');
-            console.log(response);
-        });
     };
     VideoSessionComponent.prototype.afterConnectionStuff = function () {
         if (this.authenticationService.isTeacher()) {
