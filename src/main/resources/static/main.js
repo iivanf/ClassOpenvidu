@@ -1082,7 +1082,7 @@ module.exports = "h1 {\n  text-align: center;\n  margin: 0;\n  color: white;\n}\
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"header-div\">\n    <mat-icon id=\"back-btn\" (click)=\"location.back()\" [title]=\"'Back to lessons'\">keyboard_arrow_left</mat-icon>\n    <mat-icon class=\"right-btn\" (click)=\"toggleFullScreen()\" [title]=\"'Fullscreen'\">{{fullscreenIcon}}</mat-icon>\n    <mat-icon *ngIf=\"authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toggleLocalVideo()\" [title]=\"'Toggle video'\">{{videoIcon}}</mat-icon>\n    <mat-icon *ngIf=\"authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toggleLocalAudio()\" [title]=\"'Toggle audio'\">{{audioIcon}}</mat-icon>\n    <mat-icon id=\"hand\" class=\"right-btn\" (click)=\"toggleRaiseHand()\" [title]=\"'Raise Hand'\">pan_tool</mat-icon>\n    <!-- <mat-icon *ngIf=\"authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toogleScreenShare()\" [title]=\"'Share Screen'\">screen_share</mat-icon> -->\n    <img src=\"assets/img/tortuga.png\" *ngIf=\"!authenticationService.isTeacher()\" (click)=\"toogleSlow()\"[title]=\"'tortuga'\" class=\"right-btn\" style=\"width: 50px; height: 50px;\">\n    <h1>{{lesson?.title}}</h1>\n</div>\n<div id=\"publisher\"></div>\n<div id=\"subscriber\"></div>\n"
+module.exports = "<div id=\"header-div\">\n    <mat-icon id=\"back-btn\" (click)=\"location.back()\" [title]=\"'Back to lessons'\">keyboard_arrow_left</mat-icon>\n    <mat-icon class=\"right-btn\" (click)=\"toggleFullScreen()\" [title]=\"'Fullscreen'\">{{fullscreenIcon}}</mat-icon>\n    <mat-icon *ngIf=\"authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toggleLocalVideo()\" [title]=\"'Toggle video'\">{{videoIcon}}</mat-icon>\n    <mat-icon *ngIf=\"authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toggleLocalAudio()\" [title]=\"'Toggle audio'\">{{audioIcon}}</mat-icon>\n    <mat-icon id=\"hand\" class=\"right-btn\" (click)=\"toggleRaiseHand()\" [title]=\"'Raise Hand'\">pan_tool</mat-icon>\n    <!-- <mat-icon *ngIf=\"authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toogleScreenShare()\" [title]=\"'Share Screen'\">screen_share</mat-icon> -->\n    <img src=\"assets/img/tortuga.png\" *ngIf=\"!authenticationService.isTeacher()\" (click)=\"toogleSlow()\"[title]=\"'tortuga'\" class=\"right-btn\" style=\"width: 50px; height: 50px;\">\n    <h1>{{lesson?.title}}</h1>\n</div>\n<div id=\"publisher\"></div>\n<div id=\"subscriber\"></div>"
 
 /***/ }),
 
@@ -1361,6 +1361,15 @@ var VideoSessionComponent = /** @class */ (function () {
                 });
                 snack.onAction().subscribe(function () {
                     _this.toogleSlow();
+                });
+            }
+            if ((JSON.stringify(_this.lesson.hand) != JSON.stringify(response.hand)) && _this.authenticationService.isTeacher() && response.hand.length != 0) {
+                var snack = _this.snackBar.open(response.hand[0].nickName + ' have a question !! (1/' + response.hand.length + ')', 'Hand down', {
+                    horizontalPosition: 'right',
+                    verticalPosition: 'top',
+                });
+                snack.onAction().subscribe(function () {
+                    _this.toggleRaiseHand();
                 });
             }
             _this.lesson = response;
