@@ -37,6 +37,9 @@ public class Lesson {
 	@JsonView(SimpleCourseList.class)
 	private Boolean slow;
 	
+	@ManyToMany
+	private Set<User> hand;
+
 	public Lesson() {}
 	
 	public Lesson(String title, User teacher) {
@@ -44,6 +47,7 @@ public class Lesson {
 		this.teacher = teacher;
 		this.attenders = new HashSet<>();
 		this.slow = false;
+		this.hand = new HashSet<>();
 	}
 
 	public long getId() {
@@ -76,6 +80,14 @@ public class Lesson {
 
 	public void setAttenders(Set<User> attenders) {
 		this.attenders = attenders;
+	}
+
+	public Set<User> getHand() {
+		return hand;
+	}
+
+	public void setHand(Set<User> hand) {
+		this.hand = hand;
 	}
 
 	public Boolean getSlow() {

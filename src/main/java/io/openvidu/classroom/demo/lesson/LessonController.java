@@ -1,5 +1,6 @@
 package io.openvidu.classroom.demo.lesson;
 
+import java.io.Console;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -41,9 +42,9 @@ public class LessonController {
 
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Collection<Lesson>> getLessons(@PathVariable(value = "id") String id) {
-		// if (!this.userIsLogged()) {
-		// 	return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		// }
+		if (!this.userIsLogged()) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
 
 		long id_i = -1;
 		try {
@@ -61,9 +62,9 @@ public class LessonController {
 
 	@RequestMapping(value = "/lesson/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Lesson> getLesson(@PathVariable(value = "id") String id) {
-		// if (!this.userIsLogged()) {
-		// 	return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		// }
+		if (!this.userIsLogged()) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
 
 		long id_i = -1;
 		try {
@@ -77,9 +78,9 @@ public class LessonController {
 
 	@RequestMapping(value = "/lesson/{id}/slow", method = RequestMethod.PUT)
 	public ResponseEntity<Lesson> setSlow(@PathVariable(value = "id") String id) {
-		// if (!this.userIsLogged()) {
-		// 	return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		// }
+		if (!this.userIsLogged()) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
 
 		long id_i = -1;
 		try {
@@ -102,6 +103,48 @@ public class LessonController {
 			return new ResponseEntity<>(lesson, HttpStatus.OK);
 		}
 	}
+
+	@RequestMapping(value = "/lesson/{id}/hand", method = RequestMethod.PUT)
+	public ResponseEntity<Set<User>> putRaiseHand(@PathVariable(value = "id") String id) {
+		if (!this.userIsLogged()) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+		System.out.println(user.getLoggedUser().getNickName());
+		long id_i = -1;
+		try {
+			id_i = Long.parseLong(id);
+		} catch (NumberFormatException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		Lesson c = lessonRepository.findById(id_i).get();
+		
+		Set<User> hand = c.getHand();
+		System.out.println("colleu os datos");
+		if(user.hasRoleTeacher()){
+			System.out.println("e profe");
+			if(hand.isEmpty()){
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+			User user1 = hand.iterator().next();
+			System.out.println("BAIXA A MAN A => "+ user1.getNickName());
+			hand.remove(user1);
+		} else{
+			System.out.println("e alumno");
+			if (hand.contains(user.getLoggedUser())){
+				System.out.println("Xa ten a man levantada o usuario => "+ user.getLoggedUser().getNickName());
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			} else {
+				System.out.println("Levanta a man o usuario => " + user.getLoggedUser().getNickName());
+				hand.add(user.getLoggedUser());
+			}
+		}
+		// Modifying the lesson attenders
+		c.setHand(hand);
+		// Saving the modified lesson
+		lessonRepository.save(c);
+		return new ResponseEntity<>(c.getHand(), HttpStatus.OK);
+	}
+
 
 	@RequestMapping(value = "/new", method = RequestMethod.POST)
 	public ResponseEntity<Lesson> newLesson(@RequestBody Lesson lesson) {

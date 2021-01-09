@@ -1082,7 +1082,7 @@ module.exports = "h1 {\n  text-align: center;\n  margin: 0;\n  color: white;\n}\
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"header-div\">\n    <mat-icon id=\"back-btn\" (click)=\"location.back()\" [title]=\"'Back to lessons'\">keyboard_arrow_left</mat-icon>\n    <mat-icon class=\"right-btn\" (click)=\"toggleFullScreen()\" [title]=\"'Fullscreen'\">{{fullscreenIcon}}</mat-icon>\n    <mat-icon *ngIf=\"authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toggleLocalVideo()\" [title]=\"'Toggle video'\">{{videoIcon}}</mat-icon>\n    <mat-icon *ngIf=\"authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toggleLocalAudio()\" [title]=\"'Toggle audio'\">{{audioIcon}}</mat-icon>\n    <mat-icon id=\"hand\" *ngIf=\"!authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toggleRaiseHand()\" [title]=\"'Raise Hand'\">pan_tool</mat-icon>\n    <!-- <mat-icon *ngIf=\"authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toogleScreenShare()\" [title]=\"'Share Screen'\">screen_share</mat-icon> -->\n    <img src=\"assets/img/tortuga.png\" (click)=\"toogleSlow()\"[title]=\"'tortuga'\" class=\"right-btn\" style=\"width: 50px; height: 50px;\">\n    <h1>{{lesson?.title}}</h1>\n</div>\n<div id=\"publisher\"></div>\n<div id=\"subscriber\"></div>\n"
+module.exports = "<div id=\"header-div\">\n    <mat-icon id=\"back-btn\" (click)=\"location.back()\" [title]=\"'Back to lessons'\">keyboard_arrow_left</mat-icon>\n    <mat-icon class=\"right-btn\" (click)=\"toggleFullScreen()\" [title]=\"'Fullscreen'\">{{fullscreenIcon}}</mat-icon>\n    <mat-icon *ngIf=\"authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toggleLocalVideo()\" [title]=\"'Toggle video'\">{{videoIcon}}</mat-icon>\n    <mat-icon *ngIf=\"authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toggleLocalAudio()\" [title]=\"'Toggle audio'\">{{audioIcon}}</mat-icon>\n    <mat-icon id=\"hand\" class=\"right-btn\" (click)=\"toggleRaiseHand()\" [title]=\"'Raise Hand'\">pan_tool</mat-icon>\n    <!-- <mat-icon *ngIf=\"authenticationService.isTeacher()\" class=\"right-btn\" (click)=\"toogleScreenShare()\" [title]=\"'Share Screen'\">screen_share</mat-icon> -->\n    <img src=\"assets/img/tortuga.png\" (click)=\"toogleSlow()\"[title]=\"'tortuga'\" class=\"right-btn\" style=\"width: 50px; height: 50px;\">\n    <h1>{{lesson?.title}}</h1>\n</div>\n<div id=\"publisher\"></div>\n<div id=\"subscriber\"></div>\n"
 
 /***/ }),
 
@@ -1313,7 +1313,7 @@ var VideoSessionComponent = /** @class */ (function () {
     VideoSessionComponent.prototype.toggleRaiseHand = function () {
         this.raiseHandIcon = 'pan_tool';
         console.log('HAND UP');
-        this.lessonService.getLesson(this.lesson.id).subscribe(function (response) {
+        this.lessonService.putHand(this.lesson.id).subscribe(function (response) {
             // Lesson has been updatedcd 
             console.log('GET LESSON: ');
             console.log(response);
@@ -1354,7 +1354,7 @@ var VideoSessionComponent = /** @class */ (function () {
     VideoSessionComponent.prototype.updateLesson = function () {
         var _this = this;
         this.lessonService.getLesson(this.lesson.id).subscribe(function (response) {
-            console.log(response.slow);
+            console.log(response.hand);
             _this.lesson = response;
         }, function (error) {
             console.log(error);
@@ -1463,6 +1463,7 @@ var Lesson = /** @class */ (function () {
     function Lesson(title) {
         this.title = title;
         this.attenders = [];
+        this.hand = [];
     }
     return Lesson;
 }());
@@ -1732,6 +1733,14 @@ var LessonService = /** @class */ (function () {
         var headers = new _angular_http__WEBPACK_IMPORTED_MODULE_1__["Headers"]({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
         var options = new _angular_http__WEBPACK_IMPORTED_MODULE_1__["RequestOptions"]({ headers: headers });
         return this.http.put(this.url + '/lesson/' + lessonId + '/slow', options) // Must send userId
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (response) { return response.json(); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(function (error) { return _this.handleError(error); }));
+    };
+    LessonService.prototype.putHand = function (lessonId) {
+        var _this = this;
+        console.log("PUT HAND");
+        var headers = new _angular_http__WEBPACK_IMPORTED_MODULE_1__["Headers"]({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
+        var options = new _angular_http__WEBPACK_IMPORTED_MODULE_1__["RequestOptions"]({ headers: headers });
+        return this.http.put(this.url + '/lesson/' + lessonId + '/hand', options) // Must send userId
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (response) { return response.json(); }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(function (error) { return _this.handleError(error); }));
     };
     // POST new lesson. On success returns the created lesson
