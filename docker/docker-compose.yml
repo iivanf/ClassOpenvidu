@@ -20,4 +20,3 @@ services:
             - OPENVIDU_SECRET=MY_SECRET
         ports:
             - 4443:4443
-
