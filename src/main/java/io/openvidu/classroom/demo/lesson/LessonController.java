@@ -123,7 +123,10 @@ public class LessonController {
 			if(hand.isEmpty()){
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
-			User user1 = hand.iterator().next();
+			User user1 = null;
+			for (User user : hand) {
+				user1 = user;
+			}
 			System.out.println("HAND DOWN => "+ user1.getNickName());
 			hand.remove(user1);
 		} else{
