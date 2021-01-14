@@ -2,7 +2,7 @@ version: '3'
 
 services:
     app:
-        image: openvidu/openvidu-smmc:2.16.0
+        image: iivanf/openvidu-smmc:latest
         restart: on-failure
         environment:
             - SERVER_PORT=5000
