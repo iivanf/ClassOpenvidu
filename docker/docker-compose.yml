@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+    app:
+        image: openvidu/openvidu-smmc:2.16.0
+        restart: on-failure
+        environment:
+            - SERVER_PORT=5000
+            - OPENVIDU_URL=https://open:4443
+            - OPENVIDU_SECRET=MY_SECRET
+        ports:
+            - 5000:5000
+        depends_on:
+            - open
+
+    open:
+        image: openvidu/openvidu-server-kms:2.16.0
+        restart: on-failure
+        environment:
+            - OPENVIDU_SECRET=MY_SECRET
+        ports:
+            - 4443:4443
+

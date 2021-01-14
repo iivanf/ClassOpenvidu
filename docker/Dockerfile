@@ -31,7 +31,7 @@ RUN apk update && \
 
 
 RUN mkdir -p /opt/classroom-demo
-COPY --from=backend-build /classroom-demo/target/classroom-demo-2.15.0.war /opt/classroom-demo/classroom-demo.jar
+COPY --from=backend-build /classroom-demo/target/classroom-demo-2.16.0.war /opt/classroom-demo/classroom-demo.jar
 # Entrypoint
 COPY ./docker/entrypoint.sh /usr/local/bin
 RUN chmod +x /usr/local/bin/entrypoint.sh
