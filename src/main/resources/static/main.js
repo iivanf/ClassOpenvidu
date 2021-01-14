@@ -1249,6 +1249,12 @@ var VideoSessionComponent = /** @class */ (function () {
             this.session.disconnect();
         }
     };
+    VideoSessionComponent.prototype.playAudio = function () {
+        var audio = new Audio();
+        audio.src = "assets/sound/notification.mp3";
+        audio.load();
+        audio.play();
+    };
     VideoSessionComponent.prototype.getLesson = function () {
         var _this = this;
         this.lessonService.getLesson(this.lesson.id).subscribe(function (lesson) {
@@ -1356,6 +1362,7 @@ var VideoSessionComponent = /** @class */ (function () {
         var _this = this;
         this.lessonService.getLesson(this.lesson.id).subscribe(function (response) {
             if ((_this.lesson.slow == false && response.slow == true) && _this.authenticationService.isTeacher()) {
+                _this.playAudio();
                 var snack = _this.snackBar.open('Go slow please!!', 'End now', {
                     horizontalPosition: 'right',
                     verticalPosition: 'top',
@@ -1374,6 +1381,7 @@ var VideoSessionComponent = /** @class */ (function () {
                 });
             }
             if ((JSON.stringify(_this.lesson.hand) != JSON.stringify(response.hand)) && _this.authenticationService.isTeacher() && response.hand.length != 0) {
+                _this.playAudio();
                 var snack = _this.snackBarHand.open(response.hand[0].nickName + ' have a question !! (1/' + response.hand.length + ')', 'Hand down', {
                     horizontalPosition: 'right',
                     verticalPosition: 'top',
