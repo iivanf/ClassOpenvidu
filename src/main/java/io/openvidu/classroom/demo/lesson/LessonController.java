@@ -119,22 +119,19 @@ public class LessonController {
 		Lesson c = lessonRepository.findById(id_i).get();
 		
 		Set<User> hand = c.getHand();
-		System.out.println("colleu os datos");
 		if(user.hasRoleTeacher()){
-			System.out.println("e profe");
 			if(hand.isEmpty()){
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
 			User user1 = hand.iterator().next();
-			System.out.println("BAIXA A MAN A => "+ user1.getNickName());
+			System.out.println("HAND DOWN => "+ user1.getNickName());
 			hand.remove(user1);
 		} else{
-			System.out.println("e alumno");
 			if (hand.contains(user.getLoggedUser())){
-				System.out.println("Xa ten a man levantada o usuario => "+ user.getLoggedUser().getNickName());
+				System.out.println("Already has his hand up => "+ user.getLoggedUser().getNickName());
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			} else {
-				System.out.println("Levanta a man o usuario => " + user.getLoggedUser().getNickName());
+				System.out.println("RAISE HAND => " + user.getLoggedUser().getNickName());
 				hand.add(user.getLoggedUser());
 			}
 		}
