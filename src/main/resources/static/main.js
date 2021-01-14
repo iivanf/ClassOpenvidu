@@ -1370,7 +1370,7 @@ var VideoSessionComponent = /** @class */ (function () {
                 snack.onAction().subscribe(function () {
                     _this.toogleSlow();
                     if (_this.lesson.hand.length != 0) {
-                        var snack_1 = _this.snackBarHand.open(response.hand[response.hand.length - 1].nickName + ' have a question !! (1/' + response.hand.length + ')', 'Hand down', {
+                        var snack_1 = _this.snackBarHand.open(response.hand[response.hand.length - 1].nickName + ' has a question !! (1/' + response.hand.length + ')', 'Hand down', {
                             horizontalPosition: 'right',
                             verticalPosition: 'top',
                         });
@@ -1382,7 +1382,7 @@ var VideoSessionComponent = /** @class */ (function () {
             }
             if ((JSON.stringify(_this.lesson.hand) != JSON.stringify(response.hand)) && _this.authenticationService.isTeacher() && response.hand.length != 0) {
                 _this.playAudio();
-                var snack = _this.snackBarHand.open(response.hand[response.hand.length - 1].nickName + ' have a question !! (1/' + response.hand.length + ')', 'Hand down', {
+                var snack = _this.snackBarHand.open(response.hand[response.hand.length - 1].nickName + ' has a question !! (1/' + response.hand.length + ')', 'Hand down', {
                     horizontalPosition: 'right',
                     verticalPosition: 'top',
                 });
